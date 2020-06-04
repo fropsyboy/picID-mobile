@@ -45,7 +45,7 @@ class Meal extends Component {
           showAlert: false,
           message_title: '',
           Spinner: false,
-          baseURL2: 'http://192.168.8.100:8000/api/v1',
+          baseURL2: 'http://18.197.159.108/api/v1',
         };
       }
       async startUp() {

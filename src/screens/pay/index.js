@@ -29,6 +29,9 @@ const launchLogo = require("../../../assets/smallLogo.png");
 
 const inputImage = require("../../../assets/inputDrop.png");
 
+import {NavigationEvents} from 'react-navigation';
+
+
 
 class Pay extends Component {
 
@@ -36,10 +39,10 @@ class Pay extends Component {
     super(props)
     this.state = {
       card: '',
-      month: '05',
-      year: '20',
-      ccv: '111',
-      baseURL: 'http://192.168.8.100:8000/api/v1',
+      month: '',
+      year: '',
+      ccv: '',
+      baseURL: 'http://18.197.159.108/api/v1',
       message: '',
       default_message: 'Please check your internet connection',
       showAlert: false,
@@ -53,13 +56,8 @@ class Pay extends Component {
 
   
 
-  componentDidMount() { 
-    this.getToken();
-  }
-
   getToken = async () => {
     try {
-        
         const value = await AsyncStorage.getItem('token');
         if( value !== null){
             this.setState({tokenz: value});
@@ -72,14 +70,19 @@ class Pay extends Component {
 }
 
   async payRequest(){
-
-      this.setState({Spinner: true});
+    this.setState({Spinner: true});
+    if ((this.state.card === '') || (this.state.month === '') || (this.state.year === '')  || (this.state.ccv === '')){
+      this.setState({Spinner: false});
+      this.setState({message: 'Something is wrong with the details you entrered, Please check and try again'})
+      this.showAlert();
+    }else{
+    let token;
 
       const apiKey = 'pk_test_gzgU2QGVSl4eK0uZ0B0mMLH300GONpWi3t';
-      const client = new Stripe(apiKey);
-
+      const client = await new Stripe(apiKey);
+      
       // Create a Stripe token with new card infos
-      const token = await client.createToken({
+       token = await client.createToken({
             number: this.state.card ,
             exp_month: this.state.month , 
             exp_year: this.state.year, 
@@ -87,23 +90,28 @@ class Pay extends Component {
             // address_zip: '12345'
           });
 
+      if(token){
+
+      let useToken = token.id;
+
 
     axios({ method: 'POST', url: `${this.state.baseURL}/postStripe`,  data: {
-      postStripeToken: token.id
-    },
-        headers: {
+      postStripeToken: useToken
+    },headers: {
           'Authorization': this.state.tokenz,
       } })   
     .then(function(response) {
       this.setState({Spinner: false});
+      console.log(response)
 
       if( response.data.error ===false ){
+
         AsyncStorage.setItem('status', 'Subscribed');
+
       this.setState({message: 'Sucessful'})
       this.showAlert2();
       }else{
-        console.log(response)
-        this.setState({message: 'There was an issue processing your payment please try again'})
+      this.setState({message: 'There was an issue processing your payment please try again'})
       this.showAlert();
       }
       
@@ -111,9 +119,16 @@ class Pay extends Component {
 
     }.bind(this)).catch(function(error) {
       this.setState({Spinner: false});
-      this.setState({message: this.state.default_message})
+      this.setState({message: error})
       this.showAlert();
   }.bind(this));
+
+}else{
+  this.setState({Spinner: false});
+  this.setState({message: 'Something is wrong with the details you entrered, Please check and try again'})
+  this.showAlert();
+}
+}
   
 };
 
@@ -146,6 +161,7 @@ class Pay extends Component {
   render() {
     return (
       <Container>
+        <NavigationEvents onDidFocus={() => this.getToken()} />
         <Header 
             style={{ backgroundColor: "#FF5A5A" }}
             androidStatusBarColor="#FF5A5A"

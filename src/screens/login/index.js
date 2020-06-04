@@ -35,7 +35,7 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      baseURL: 'http://192.168.8.100:8000/api/v1',
+      baseURL: 'http://18.197.159.108/api/v1',
       message: '',
       default_message: 'Please check your internet connection',
       showAlert: false,
@@ -142,7 +142,7 @@ class Login extends Component {
                 />
             </Item>
 
-            <Button  block rounded style={styles.bottonStyle} onPress= {() => this.loginRequest()}>
+            <Button  block rounded style={styles.bottonStyle2} onPress= {() => this.loginRequest()}>
             <Text style={{color: 'white', textAlign: 'center',alignSelf: "center",}}>Sign In</Text>
           </Button>
 

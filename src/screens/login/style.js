@@ -54,7 +54,12 @@ export default {
     borderRadius: 100,
     textAlign: 'center'
   },
-  fixedFooter: {
-    
-  }
+  bottonStyle2: {
+    backgroundColor: '#EF3C3C',
+    alignSelf: "center",
+    marginTop:deviceHeight * 0.2,
+    width: deviceWidth * 0.4,
+    borderRadius: 100,
+    textAlign: 'center'
+  },
 };

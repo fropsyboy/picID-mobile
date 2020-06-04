@@ -21,7 +21,7 @@ class Camera extends Component {
       type: RNCamera.Constants.Type.back,
       switch: false,
       password: '',
-      baseURL: 'http://192.168.8.100:8000/api/v1',
+      baseURL: 'http://18.197.159.108/api/v1',
       message: '',
       default_message: 'Please check your internet connection',
       showAlert: false,

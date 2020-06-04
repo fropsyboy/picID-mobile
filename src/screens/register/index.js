@@ -37,7 +37,7 @@ class Login extends Component {
       email: '',
       password: '',
       cpassword: '',
-      baseURL: 'http://192.168.8.100:8000/api/v1',
+      baseURL: 'http://18.197.159.108/api/v1',
       message: '',
       default_message: 'Please check your internet connection',
       showAlert: false,
@@ -73,9 +73,9 @@ class Login extends Component {
         if( response.data.error ===false ){
 
           try {
-            AsyncStorage.setItem('token',  `Bearer ${response.data.access_token}`);
+            // AsyncStorage.setItem('token',  `Bearer ${response.data.access_token}`);
 
-            this.props.navigation.navigate('Homepage')
+            this.props.navigation.navigate('Login')
 
           } catch (error) {
             this.setState({message: error})
