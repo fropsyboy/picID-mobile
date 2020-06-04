@@ -88,7 +88,6 @@ class Login extends Component {
         }
 
       }.bind(this)).catch(function(error) {
-        console.log(error)
         this.setState({Spinner: false});
         this.setState({message: this.state.default_message})
         this.showAlert();
@@ -179,7 +178,7 @@ class Login extends Component {
           onRequestClose={() => {}}>
           <View style={{marginTop: 300, backgroundColor:'white'}}>
           <View >
-            <Text style={{color: 'black',alignSelf: "center"}}>{this.state.message}</Text>
+            <Text style={{color: 'black',textAlign: "center", textAlignVertical: "center"}}>{this.state.message}</Text>
             <Button  block rounded style={styles.bottonStyle}  onPress={() => {
                 this.hideAlert();
               }}>

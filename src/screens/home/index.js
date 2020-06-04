@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { ImageBackground, View, StatusBar, Image } from "react-native";
 import { Container, Button, H3, Text, Content, H1 } from "native-base";
 
+
 import styles from "./style";
 
 const launchLogo = require("../../../assets/splash1.png");

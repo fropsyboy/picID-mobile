@@ -39,7 +39,7 @@ class Homepage extends Component {
     super(props)
     this.state = {
       verify: '',
-      baseURL: 'http://35.176.213.122/evisit_residential/',
+      baseURL: 'http://192.168.8.100:8000/api/v1',
       message: '',
       default_message: 'Please check your internet connection',
       showAlert: false,
@@ -51,7 +51,8 @@ class Homepage extends Component {
       status: '',
       feedback: false,
       feebackMsg: '',
-      showPayAlert: false
+      showPayAlert: false,
+      drops: []
 
     };
   }
@@ -64,14 +65,16 @@ class Homepage extends Component {
         const status = await AsyncStorage.getItem('status');
 
         if( value !== null){
-          if(status == 'trial'){
-            this.setState({message: 'Your Trial period has expired'})
+          if(status == 'Expired'){
+            this.setState({message: 'Please Renew your Subscription'})
 
             this.showPayAlert();
           }
             this.setState({tokenz: value});
 
             this.setState({status});
+
+            this.getdrops();
         }else{
           this.props.navigation.navigate('Login')
         }
@@ -79,6 +82,27 @@ class Homepage extends Component {
       this.props.navigation.navigate('Login')
     }
   }
+
+
+  async getdrops(){
+    this.setState({Spinner: true});
+    axios({ method: 'GET', url: `${this.state.baseURL}/discover`, 
+        headers: {
+          'Authorization': this.state.tokenz,
+      } })   
+    .then(function(response) {
+      this.setState({Spinner: false});
+      
+      this.setState({drops: response.data.images});
+     
+
+    }.bind(this)).catch(function(error) {
+      this.setState({Spinner: false});
+      this.setState({message: this.state.default_message})
+      this.showAlert();
+  }.bind(this));
+
+}
 
 
   showAlert = () => {
@@ -103,6 +127,8 @@ class Homepage extends Component {
     this.setState({
       showPayAlert: false
     });
+
+    this.props.navigation.navigate('Pay')
   };
 
   render() {
@@ -127,102 +153,32 @@ class Homepage extends Component {
         </Button>
 
 
-        <Card style={{ borderRadius: 10, borderColor: 'white',borderWidth: 10, shadowColor: "#000000", marginBottom: 10, paddingBottom:5, paddingTop:5,}}>
-            <CardItem >
-              <Body>
-              <View style={{flex: 1,flexDirection: 'row'}} >
-              <Thumbnail square large source={drawerCover} style={styles.imageLogo2}/>
+        { 
+              this.state.drops.map((values, i) => {
+                  return (
 
-              <View style={{marginLeft: 10}}>
-                <Text style={{color: '#FF5A5A', fontWeight: 'bold',textAlign:'left',marginRight: 60}}> Rice Pudding{"\n"} 
-                <Text style={{fontSize: 12, textAlign:'center', marginRight: 20}}> Lorem ipsum dolor sit amet,
-                 consectetuer adipiscing elit, sed diam nonummy nibh... 
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
-                </Text>
-                </Text>
-              </View>        
-              </View>            
-              </Body>
-            </CardItem>
-          </Card>
+                    <Card key={i}  style={{ borderRadius: 10, borderColor: 'white',borderWidth: 10, shadowColor: "#000000", marginBottom: 10, paddingBottom:5, paddingTop:5,}}>
+                    <CardItem >
+                      <Body >
+                      <View style={{flex: 1,flexDirection: 'row'}} >
+                      <Thumbnail square small source={{uri: values.path}}  style={styles.imageLogo2}/>
+        
+                      <View style={{marginLeft: 10}}>
+                        <Text onPress={() => this.props.navigation.navigate("Details",{ type : values.type, image : values.path, name : values.title, source: values.body})} style={{color: '#FF5A5A', fontWeight: 'bold',textAlign:'left',marginRight: 60}}> {values.label}{"\n"} 
+                        <Text style={{fontSize: 12, textAlign:'center', marginRight: 20}}> 
+                        Source: {values.body}
+                        </Text>
+                        </Text>
+                      </View>        
+                      </View>            
+                      </Body>
+                    </CardItem>
+                   
+                  </Card>
 
-          <Card style={{ borderRadius: 10, borderColor: 'white',borderWidth: 10, shadowColor: "#000000", marginBottom: 10, paddingBottom:5, paddingTop:5,}}>
-            <CardItem >
-              <Body>
-              <View style={{flex: 1,flexDirection: 'row'}} >
-              <Thumbnail square large source={drawerCover} style={styles.imageLogo2}/>
-
-              <View style={{marginLeft: 10}}>
-                <Text style={{color: '#FF5A5A', fontWeight: 'bold',textAlign:'left',marginRight: 60}}> Rice Pudding{"\n"} 
-                <Text style={{fontSize: 12, textAlign:'center', marginRight: 20}}> Lorem ipsum dolor sit amet,
-                 consectetuer adipiscing elit, sed diam nonummy nibh... 
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
-                </Text>
-                </Text>
-              </View>        
-              </View>            
-              </Body>
-            </CardItem>
-          </Card>
-
-          <Card style={{ borderRadius: 10, borderColor: 'white',borderWidth: 10, shadowColor: "#000000", marginBottom: 10, paddingBottom:5, paddingTop:5,}}>
-            <CardItem >
-              <Body>
-              <View style={{flex: 1,flexDirection: 'row'}} >
-              <Thumbnail square large source={drawerCover} style={styles.imageLogo2}/>
-
-              <View style={{marginLeft: 10}}>
-                <Text style={{color: '#FF5A5A', fontWeight: 'bold',textAlign:'left',marginRight: 60}}> Rice Pudding{"\n"} 
-                <Text style={{fontSize: 12, textAlign:'center', marginRight: 20}}> Lorem ipsum dolor sit amet,
-                 consectetuer adipiscing elit, sed diam nonummy nibh... 
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
-                </Text>
-                </Text>
-              </View>        
-              </View>            
-              </Body>
-            </CardItem>
-          </Card>
-
-
-          <Card style={{ borderRadius: 10, borderColor: 'white',borderWidth: 10, shadowColor: "#000000", marginBottom: 10, paddingBottom:5, paddingTop:5,}}>
-            <CardItem >
-              <Body>
-              <View style={{flex: 1,flexDirection: 'row'}} >
-              <Thumbnail square large source={drawerCover} style={styles.imageLogo2}/>
-
-              <View style={{marginLeft: 10}}>
-                <Text style={{color: '#FF5A5A', fontWeight: 'bold',textAlign:'left',marginRight: 60}}> Rice Pudding{"\n"} 
-                <Text style={{fontSize: 12, textAlign:'center', marginRight: 20}}> Lorem ipsum dolor sit amet,
-                 consectetuer adipiscing elit, sed diam nonummy nibh... 
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
-                </Text>
-                </Text>
-              </View>        
-              </View>            
-              </Body>
-            </CardItem>
-          </Card>
-
-
-          <Card style={{ borderRadius: 10, borderColor: 'white',borderWidth: 10, shadowColor: "#000000", marginBottom: 10, paddingBottom:5, paddingTop:5,}}>
-            <CardItem >
-              <Body>
-              <View style={{flex: 1,flexDirection: 'row'}} >
-              <Thumbnail square large source={drawerCover} style={styles.imageLogo2}/>
-
-              <View style={{marginLeft: 10}}>
-                <Text style={{color: '#FF5A5A', fontWeight: 'bold',textAlign:'left',marginRight: 60}}> Rice Pudding{"\n"} 
-                <Text style={{fontSize: 12, textAlign:'center', marginRight: 20}}> Lorem ipsum dolor sit amet,
-                 consectetuer adipiscing elit, sed diam nonummy nibh... 
-                euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
-                </Text>
-                </Text>
-              </View>        
-              </View>            
-              </Body>
-            </CardItem>
-          </Card>
+                  );
+              })
+          }
 
   
      </Content>
@@ -237,7 +193,7 @@ class Homepage extends Component {
               <Icon name="ios-cube" style={{fontSize: 25, color: 'white'}}/>
               <Text style={{fontSize: 7, color: 'white'}}>Expore</Text>
             </Button>
-            <Button   vertical >
+            <Button   vertical onPress={() => this.props.navigation.navigate("Camera")}>
               <Icon active name="ios-camera" style={{fontSize: 60, color: 'white'}}/>
             </Button>
             <Button   vertical onPress={() => this.props.navigation.navigate("Gallery")}>
@@ -261,7 +217,7 @@ class Homepage extends Component {
           onRequestClose={() => {}}>
           <View style={{marginTop: 300, backgroundColor:'white'}}>
           <View >
-            <Text style={{color: 'black',alignSelf: "center"}}>{this.state.message}</Text>
+            <Text style={{color: 'black',textAlign: "center", textAlignVertical: "center"}}>{this.state.message}</Text>
             <Button  block rounded style={styles.bottonStyle}  onPress={() => {
                 this.hideAlert();
               }}>
@@ -291,7 +247,7 @@ class Homepage extends Component {
           onRequestClose={() => {}}>
           <View style={{marginTop: 300, backgroundColor:'white'}}>
           <View >
-            <Text style={{color: 'black',alignSelf: "center"}}>{this.state.message}</Text>
+            <Text style={{color: 'black',textAlign: "center", textAlignVertical: "center"}}>{this.state.message}</Text>
             <Button  block rounded style={styles.bottonStyle2}  onPress={() => {
                 this.hidePayAlert();
               }}>

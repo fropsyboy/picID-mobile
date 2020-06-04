@@ -24,10 +24,11 @@ import axios from 'axios';
 
 const launchscreenBg = require("../../../assets/backDrop.png");
 
-const launchLogo = require("../../../assets/meal.jpg");
+const launchLogo = require("../../../assets/save.png");
 
 const inputImage = require("../../../assets/inputDrop.png");
 
+import {NavigationEvents} from 'react-navigation';
 
 class Explore extends Component {
 
@@ -36,21 +37,55 @@ class Explore extends Component {
     this.state = {
       email: '',
       password: '',
-      baseURL: 'http://35.176.213.122/evisit_residential/',
+      baseURL: 'http://192.168.8.100:8000/api/v1',
       message: '',
       default_message: 'Please check your internet connection',
       showAlert: false,
       message_title: '',
       Spinner: false,
+      drops: []
 
     };
   }
 
   
+  getToken = async () => {
+    try {
+        const value = await AsyncStorage.getItem('token');
 
-  componentDidMount() { 
+        if( value !== null){
+         
+            this.setState({tokenz: value});
 
+            this.getdrops();
+        }else{
+          this.props.navigation.navigate('Login')
+        }
+    } catch (error) {
+      this.props.navigation.navigate('Login')
+    }
   }
+
+
+  async getdrops(){
+    this.setState({Spinner: true});
+    axios({ method: 'GET', url: `${this.state.baseURL}/explore`, 
+        headers: {
+          'Authorization': this.state.tokenz,
+      } })   
+    .then(function(response) {
+      this.setState({Spinner: false});
+      
+      this.setState({drops: response.data.images});
+     
+
+    }.bind(this)).catch(function(error) {
+      this.setState({Spinner: false});
+      this.setState({message: this.state.default_message})
+      this.showAlert();
+  }.bind(this));
+
+}
 
 
   showAlert() {
@@ -66,9 +101,11 @@ class Explore extends Component {
   };
 
 
+
   render() {
     return (
       <Container>
+         <NavigationEvents onDidFocus={() => this.getToken()} />
         <Header 
             style={{ backgroundColor: "#FF5A5A", marginTop:20 }}
             androidStatusBarColor="#FF5A5A"
@@ -86,46 +123,34 @@ class Explore extends Component {
             </Body>
             </Header>
 
-        <Content >
+            <Content >
         <View>
-          <Card>
-              <CardItem>
-                <Left>
-                  <Body>
-                    <Text style={{color: "red" }}>Turkey Desert</Text>
-                  </Body>
-                </Left>
-              </CardItem>
-              <CardItem cardBody>
-                <Image source={launchLogo}  style={{height: 200, width: 300, flex: 1}}/>
-              </CardItem> 
-            </Card>
 
-            <Card>
-              <CardItem>
-                <Left>
-                  <Body>
-                    <Text style={{color: "red" }}>Turkey Desert</Text>
-                  </Body>
-                </Left>
-              </CardItem>
-              <CardItem cardBody>
-                <Image source={launchLogo}  style={{height: 200, width: 300, flex: 1}}/>
-              </CardItem> 
-            </Card>
 
-            <Card>
-              <CardItem>
-                <Left>
-                  <Body>
-                    <Text style={{color: "red" }}>Turkey Desert</Text>
-                  </Body>
-                </Left>
-              </CardItem>
-              <CardItem cardBody>
-                <Image source={launchLogo}  style={{height: 200, width: 300, flex: 1}}/>
-              </CardItem> 
-            </Card>
+          
+
+            { 
+              this.state.drops.map((values, i) => {
+                  return (
+
+                    <Card key={i}  >
+                    <CardItem>
+                      <Left>
+                        <Body>
+                          <Text style={{color: "red" }} onPress={() => this.props.navigation.navigate("Details",{ type : values.type, image : values.path, name : values.title, source: values.body})} >{values.title}</Text>
+                        </Body>
+                      </Left>
+                    </CardItem>
+                    <CardItem cardBody>
+                      <Image source={{uri: values.path}} onPress={() => this.props.navigation.navigate("Details",{ type : values.type, image : values.path, name : values.title, source: values.body})}  style={{height: 200, width: 300, flex: 1}}/>
+                    </CardItem>      
+                  </Card>
+
+                  );
+              })
+          }
+
+            
 
         </View>
         </Content>
@@ -139,7 +164,7 @@ class Explore extends Component {
               <Icon name="ios-cube" style={{fontSize: 25, color: 'white'}}/>
               <Text style={{fontSize: 9, color: 'white'}}>Expore</Text>
             </Button>
-            <Button   vertical onPress={() => this.props.navigation.navigate("Invite")}>
+            <Button   vertical onPress={() => this.props.navigation.navigate("Camera")}>
               <Icon active name="ios-camera" style={{fontSize: 60, color: 'white'}}/>
             </Button>
             <Button   vertical onPress={() => this.props.navigation.navigate("Gallery")}>
@@ -160,7 +185,7 @@ class Explore extends Component {
           onRequestClose={() => {}}>
           <View style={{marginTop: 300, backgroundColor:'white'}}>
           <View >
-            <Text style={{color: 'black',alignSelf: "center"}}>{this.state.message}</Text>
+            <Text style={{color: 'black',textAlign: "center", textAlignVertical: "center"}}>{this.state.message}</Text>
             <Button  block rounded style={styles.bottonStyle}  onPress={() => {
                 this.hideAlert();
               }}>

@@ -3961,6 +3961,11 @@ jest@24.1.0:
     import-local "^2.0.0"
     jest-cli "^24.1.0"
 
+jetifier@^1.6.5:
+  version "1.6.5"
+  resolved "https://registry.yarnpkg.com/jetifier/-/jetifier-1.6.5.tgz#ea87324a4230bef20a9651178ecab978ee54a8cb"
+  integrity sha512-T7yzBSu9PR+DqjYt+I0KVO1XTb1QhAfHnXV5Nd3xpbXM6Xg4e3vP60Q4qkNU8Fh6PHC2PivPUNN3rY7G2MxcDQ==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -5632,6 +5637,13 @@ react-native-awesome-alerts@^1.3.2:
   dependencies:
     prop-types "^15.7.2"
 
+react-native-camera@^3.24.1:
+  version "3.24.1"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.24.1.tgz#e5ddbb81a88c634cf220b039da739427e16a1d48"
+  integrity sha512-D6X4WDe6mptKwH2/0dv42NgcTpT5Wq6jHyQpmFlh4pEy8OtBmgeYg5HXPmvc0SEtXj10MG+5WQz2oCoEkITs4A==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-native-date-picker@^2.7.9:
   version "2.7.9"
   resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-2.7.9.tgz#f662d8741a3f78148eccf492d70a1740b035024b"
@@ -5694,6 +5706,11 @@ react-native-simple-time-picker@^0.2.0:
   integrity sha1-saEqeICsL1oSALC8PTwAZRlgl9w=
   dependencies:
     prop-types "^15.5.10"
+
+react-native-stripe-api@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-stripe-api/-/react-native-stripe-api-0.1.0.tgz#d1cb21fb0dc7ecc643f53d3e88a18e98e9d81ffd"
+  integrity sha1-0csh+w3H7MZD9T0+iKGOmOnYH/0=
 
 react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0:
   version "1.3.2"

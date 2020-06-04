@@ -16,6 +16,12 @@ import Gallery from "./screens/gallery";
 import Explore from "./screens/explore";
 import Change from "./screens/change";
 import Food from "./screens/food";
+import Camera from "./screens/camera";
+import Result from "./screens/result";
+import Meal from "./screens/meal";
+import Details from "./screens/details";
+import Pay from "./screens/pay";
+
 
 
 const Drawer = createDrawerNavigator(
@@ -46,8 +52,11 @@ const AppNavigator = createStackNavigator(
     Explore: { screen: Explore },
     Change: { screen: Change },
     Food: { screen: Food },
-
-
+    Camera: { screen: Camera },
+    Result: { screen: Result },
+    Meal: { screen: Meal },
+    Details: { screen: Details },
+    Pay: { screen: Pay },
 
 
   },

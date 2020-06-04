@@ -142,10 +142,8 @@ class Profile extends Component {
           'Authorization': this.state.tokenz,
       } })   
     .then(function(response) {
-      console.log(response)
       
     }.bind(this)).catch(function(error) {
-      console.log(error)
   }.bind(this));
   };
 
@@ -267,7 +265,7 @@ class Profile extends Component {
               <Icon name="ios-cube" style={{fontSize: 25, color: 'white'}}/>
               <Text style={{fontSize: 7, color: 'white'}}>Expore</Text>
             </Button>
-            <Button   vertical >
+            <Button   vertical onPress={() => this.props.navigation.navigate("Camera")}>
               <Icon active name="ios-camera" style={{fontSize: 60, color: 'white'}}/>
             </Button>
             <Button   vertical onPress={() => this.props.navigation.navigate("Gallery")}>
@@ -288,7 +286,7 @@ class Profile extends Component {
           onRequestClose={() => {}}>
           <View style={{marginTop: 300, backgroundColor:'white'}}>
           <View >
-            <Text style={{color: 'black',alignSelf: "center"}}>{this.state.message}</Text>
+            <Text style={{color: 'black',textAlign: "center", textAlignVertical: "center"}}>{this.state.message}</Text>
             <Button  block rounded style={styles.bottonStyle}  onPress={() => {
                 this.hideAlert();
               }}>
