@@ -87,12 +87,9 @@ class Profile extends Component {
       if( response.data.error ===false ){
           this.setState({username: response.data.user.username});
           this.setState({email: response.data.user.email});
-          const d = new Date(response.data.user.created_at)
-          const dtf = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'short', day: '2-digit' }) 
-          const [{ value: mo },,{ value: da },,{ value: ye }] = dtf.formatToParts(d) 
-          const ddate = `${mo} ${da}, ${ye}`
+         
 
-          this.setState({created_at: ddate});
+          this.setState({created_at: response.data.user.created_at});
 
           this.setState({pic: `https://ui-avatars.com/api/?format=png&name=${response.data.user.username}` })
       }else{

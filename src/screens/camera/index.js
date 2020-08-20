@@ -160,6 +160,9 @@ class Camera extends Component {
             this.camera = cam;
           }}
           type={type}
+          permissionDialogTitle={'Permission to use camera'}
+          permissionDialogMessage={'We need your permission to use your camera phone'}
+          captureAudio={false}
           style={styles.preview}
         />
         

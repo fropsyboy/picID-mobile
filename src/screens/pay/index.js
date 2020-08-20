@@ -102,7 +102,6 @@ class Pay extends Component {
       } })   
     .then(function(response) {
       this.setState({Spinner: false});
-      console.log(response)
 
       if( response.data.error ===false ){
 

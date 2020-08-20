@@ -13,7 +13,7 @@ import {
   Button,
   Left,Title,Right,Footer,FooterTab,Badge,Fab,IconNB,Item, 
 } from "native-base";
-import { ImageBackground, View, ScrollView, StatusBar } from "react-native";
+import { ImageBackground, View, ScrollView, StatusBar , Linking} from "react-native";
 
 import styles from "./style";
 
@@ -48,6 +48,15 @@ class Result extends Component {
         this.setState({image_id})
     }
 
+    handleCLink = () => {
+      Linking.canOpenURL(this.state.uptakes.videoUrl).then(supported => {
+        if (supported) {
+          Linking.openURL(this.state.uptakes.videoUrl);
+        } else {
+          console.log("Don't know how to open URI: " + this.state.uptakes.videoUrl);
+        }
+      });
+    }
 
 
   render() {
@@ -97,6 +106,8 @@ class Result extends Component {
                   );
               })
           }
+          
+
           
             
           </Content>

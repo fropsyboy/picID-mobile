@@ -21,7 +21,9 @@ import Result from "./screens/result";
 import Meal from "./screens/meal";
 import Details from "./screens/details";
 import Pay from "./screens/pay";
-
+import Reset from "./screens/reset";
+import Confirm from "./screens/confirm";
+import Newreset from "./screens/newreset";
 
 
 const Drawer = createDrawerNavigator(
@@ -57,7 +59,9 @@ const AppNavigator = createStackNavigator(
     Meal: { screen: Meal },
     Details: { screen: Details },
     Pay: { screen: Pay },
-
+    Reset: { screen: Reset },
+    Confirm: { screen: Confirm },
+    Newreset: { screen: Newreset },
 
   },
   {

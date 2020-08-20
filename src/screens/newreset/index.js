@@ -28,12 +28,12 @@ const launchLogo = require("../../../assets/smallLogo.png");
 const inputImage = require("../../../assets/inputDrop.png");
 
 
-class Login extends Component {
+class Newreset extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      email: '',
+      cpassword: '',
       password: '',
       baseURL: 'http://18.197.159.108/api/v1',
       message: '',
@@ -41,46 +41,46 @@ class Login extends Component {
       showAlert: false,
       message_title: '',
       Spinner: false,
+      tokenz: '',
+      email: ''
 
     };
   }
 
   
 
-  componentDidMount() { 
+  componentDidMount() {
+    this.getToken();
+  };
 
+  getToken = async () => {
+    const email = await this.props.navigation.getParam('email');
+    this.setState({email})
   }
 
   async loginRequest(){
+    if (this.state.password !== this.state.cpassword){
+      this.setState({message: 'Your password and confirm password do not maytch'})
+        this.showAlert();
+    }else{
 
       this.setState({Spinner: true});
 
-      axios({ method: 'POST', url: `${this.state.baseURL}/login`, data: { 
-        email: this.state.email,
+      axios({ method: 'POST', url: `${this.state.baseURL}/NewpasswordUpdate`, data: { 
         password: this.state.password,
+        email: this.state.email
         } })
         
       .then(function(response) {
         this.setState({Spinner: false});
+        
+        if( response.data.error ===false ){
 
-        if (response.data.error === false){
+          this.props.navigation.navigate("Login")
 
-          try {
-
-            AsyncStorage.setItem('token',  `Bearer ${response.data.access_token}`);
-
-            AsyncStorage.setItem('status', response.data.status);
-
-            this.props.navigation.navigate('Homepage')
-
-          } catch (error) {
-              this.setState({message: error})
-              this.showAlert();
-          }
         }else{
           this.setState({message: 'Please check your credentials and Try again'})
           this.showAlert();
-
         }
 
       }.bind(this)).catch(function(error) {
@@ -88,7 +88,7 @@ class Login extends Component {
         this.setState({message: this.state.default_message})
         this.showAlert();
     }.bind(this));
-  
+  }
 
 };
 
@@ -109,7 +109,7 @@ class Login extends Component {
     return (
       <Container>
         <Header 
-            style={{ backgroundColor: "#FF5A5A" }}
+            style={{ backgroundColor: "#FF5A5A", marginTop:20 }}
             androidStatusBarColor="#FF5A5A"
             iosBarStyle="light-content"
             >
@@ -119,39 +119,35 @@ class Login extends Component {
                 </Button>
             </Left>
             <Body>
+              <Text style={{ color: 'white'}}>
+                Change Password
+              </Text>
             </Body>
             </Header>
 
         <Content style={styles.imageContainer}>
         <View>
-          <H1 style={styles.textInput}>
-            Sign In
-          </H1>
+        
           <View>
-            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30}}>  Email</Label>
+            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30}}>  Password</Label>
             <Item  stackedLabel regular error rounded  style={styles.inputStyle}>
-              <Input  value={this.state.email} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
-                onChangeText={(text) => {this.setState({email: text})}} 
-                />
-            </Item>
-
-            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30, marginTop: 30}}>  Password</Label>
-            <Item  stackedLabel regular error rounded  style={styles.inputStyle}>
-              <Input secureTextEntry={true}  value={this.state.password} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
+              <Input  secureTextEntry={true} value={this.state.password} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
                 onChangeText={(text) => {this.setState({password: text})}} 
                 />
             </Item>
 
-            <Button  block rounded style={styles.bottonStyle2} onPress= {() => this.loginRequest()}>
-            <Text style={{color: 'white', textAlign: 'center',alignSelf: "center",}}>Sign In</Text>
+            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30, marginTop: 30}}> Confirm Password</Label>
+            <Item  stackedLabel regular error rounded  style={styles.inputStyle}>
+              <Input secureTextEntry={true}  value={this.state.cpassword} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
+                onChangeText={(text) => {this.setState({cpassword: text})}} 
+                />
+            </Item>
+
+            <Button  block rounded style={styles.bottonStyle} onPress= {() => this.loginRequest()}>
+            <Text style={{color: 'white', textAlign: 'center',alignSelf: "center",}}>Update</Text>
           </Button>
 
-          <Text style={{color: 'white',alignSelf: "center", marginTop:6}} onPress={() => this.props.navigation.navigate("Reset")} >Reset Password?
-          </Text>
-
-          <Text style={{color: 'white',alignSelf: "center", marginTop:6}}>New to PicID?
-          <Text style={{color: 'white', marginBottom:10, fontWeight: "bold"}} onPress={() => this.props.navigation.navigate("Register")} > Sign Up </Text>
-          </Text>
+          
           </View>
 
         </View>
@@ -180,7 +176,7 @@ class Login extends Component {
           onRequestClose={() => {}}>
          <View style={{marginTop: 300}}>
                   <View >
-                      <Spinner color="white"/>
+                      <Spinner color="red"/>
                   </View>
           </View>
 
@@ -190,4 +186,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Newreset;

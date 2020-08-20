@@ -28,14 +28,14 @@ export default {
   },
   imageLogo: {
     position: "relative",
-    width: 250,
-    height: 240,
-    marginTop: deviceHeight * 0.1,
+    width: 200,
+    height: 190,
+    marginTop: deviceHeight * 0.02,
     alignSelf: "center"
   },
   headerText: {
     position: "relative",
-    marginTop:0,
+    marginTop:50,
     alignSelf: "center",
     color: "#FF5A5A",
     fontWeight: "bold"

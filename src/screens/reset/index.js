@@ -28,7 +28,7 @@ const launchLogo = require("../../../assets/smallLogo.png");
 const inputImage = require("../../../assets/inputDrop.png");
 
 
-class Login extends Component {
+class Reset extends Component {
 
   constructor(props) {
     super(props)
@@ -51,13 +51,12 @@ class Login extends Component {
 
   }
 
-  async loginRequest(){
+  async resetRequest(){
 
       this.setState({Spinner: true});
 
-      axios({ method: 'POST', url: `${this.state.baseURL}/login`, data: { 
+      axios({ method: 'POST', url: `${this.state.baseURL}/reset`, data: { 
         email: this.state.email,
-        password: this.state.password,
         } })
         
       .then(function(response) {
@@ -66,19 +65,14 @@ class Login extends Component {
         if (response.data.error === false){
 
           try {
-
-            AsyncStorage.setItem('token',  `Bearer ${response.data.access_token}`);
-
-            AsyncStorage.setItem('status', response.data.status);
-
-            this.props.navigation.navigate('Homepage')
+            this.props.navigation.navigate("Confirm",{ code : response.data.code, email: this.state.email})
 
           } catch (error) {
               this.setState({message: error})
               this.showAlert();
           }
         }else{
-          this.setState({message: 'Please check your credentials and Try again'})
+          this.setState({message: 'Please check the email and Try again'})
           this.showAlert();
 
         }
@@ -125,7 +119,7 @@ class Login extends Component {
         <Content style={styles.imageContainer}>
         <View>
           <H1 style={styles.textInput}>
-            Sign In
+            Reset Password
           </H1>
           <View>
             <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30}}>  Email</Label>
@@ -135,19 +129,11 @@ class Login extends Component {
                 />
             </Item>
 
-            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30, marginTop: 30}}>  Password</Label>
-            <Item  stackedLabel regular error rounded  style={styles.inputStyle}>
-              <Input secureTextEntry={true}  value={this.state.password} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
-                onChangeText={(text) => {this.setState({password: text})}} 
-                />
-            </Item>
+           
 
-            <Button  block rounded style={styles.bottonStyle2} onPress= {() => this.loginRequest()}>
-            <Text style={{color: 'white', textAlign: 'center',alignSelf: "center",}}>Sign In</Text>
+            <Button  block rounded style={styles.bottonStyle2} onPress= {() => this.resetRequest()}>
+            <Text style={{color: 'white', textAlign: 'center',alignSelf: "center",}}>Reset Password</Text>
           </Button>
-
-          <Text style={{color: 'white',alignSelf: "center", marginTop:6}} onPress={() => this.props.navigation.navigate("Reset")} >Reset Password?
-          </Text>
 
           <Text style={{color: 'white',alignSelf: "center", marginTop:6}}>New to PicID?
           <Text style={{color: 'white', marginBottom:10, fontWeight: "bold"}} onPress={() => this.props.navigation.navigate("Register")} > Sign Up </Text>
@@ -190,4 +176,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Reset;

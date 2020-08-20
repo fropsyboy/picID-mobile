@@ -69,5 +69,14 @@ export default {
   search: {
     width: deviceWidth * 0.95,
     alignSelf: "center",
-  }
+  },
+  bottonStyle2: {
+    backgroundColor: '#EF3C3C',
+    alignSelf: "center",
+    marginTop:deviceHeight * 0.03,
+    width: deviceWidth * 0.4,
+    borderRadius: 100,
+    textAlign: 'center'
+  },
+
 };

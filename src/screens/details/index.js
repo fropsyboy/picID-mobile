@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { ImageBackground, View, StatusBar, Image, AsyncStorage, Modal } from "react-native";
+import { ImageBackground, View, StatusBar, Image, AsyncStorage, Modal , Linking, ScrollView} from "react-native";
 import { Container, Button, H3, Text, Content, H1, CardItem, Card, Body, Thumbnail, Spinner, Footer,FooterTab , Icon} from "native-base";
 import {NavigationEvents} from 'react-navigation';
 import axios from 'axios';
@@ -181,6 +181,16 @@ hideHealth() {
   });
 };
 
+handleClink = () => {
+  Linking.canOpenURL(`https://www.google.com/search?q=barefootcontessa%26${this.state.name}`).then(supported => {
+    if (supported) {
+      Linking.openURL(`https://www.google.com/search?q=barefootcontessa%26${this.state.name}`);
+    } else {
+      console.log("Don't know how to open URI: " + `https://www.google.com/search?q=barefootcontessa%26${this.state.name}`);
+    }
+  });
+}
+
 
   render() {
     return (
@@ -194,7 +204,10 @@ hideHealth() {
             resizeMode="contain"
             style={styles.imageLogo}
           ></Image>
-
+          <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          >
            <View style={{flexDirection: 'row',alignSelf: "center",marginTop:10,}}>
               <Button light small style={styles.bottonStyle2} onPress= {() => this.showFeedback()}>
                 <Text style={{color: '#FF5A5A', textAlign: 'center',alignSelf: "center",}}>Ingredients</Text>
@@ -203,7 +216,12 @@ hideHealth() {
               <Button small style={styles.bottonStyle3} onPress= {() => this.showHealth()}>
                 <Text style={{color: 'white', textAlign: 'center',alignSelf: "center", }}>Health Benefits</Text>
               </Button>
+
+              <Button light small style={styles.bottonStyle4} onPress= {() => this.handleClink()}>
+                <Text style={{color: '#FF5A5A', textAlign: 'center',alignSelf: "center",}}>More Details</Text>
+              </Button>
           </View>
+          </ScrollView>
 
     <H1 style={styles.textInput}>Recipe - {this.state.name}</H1>
 

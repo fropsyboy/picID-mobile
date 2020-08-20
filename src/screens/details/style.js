@@ -57,7 +57,7 @@ export default {
   bottonStyle3: {
     backgroundColor: '#FF5A5A',
     alignSelf: "center",
-    marginLeft:80,
+    marginLeft:10,
     borderRadius: 5,
     textAlign: 'center'
   },
@@ -74,5 +74,12 @@ export default {
     alignSelf: "center",
     borderRadius: 5,
     textAlign: 'center'
+  },
+  bottonStyle4: {
+    alignSelf: "center",
+    borderRadius: 5,
+    textAlign: 'center',
+    marginLeft:10,
+
   },
 };

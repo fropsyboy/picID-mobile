@@ -27,8 +27,10 @@ const launchLogo = require("../../../assets/smallLogo.png");
 
 const inputImage = require("../../../assets/inputDrop.png");
 
+import {NavigationEvents} from 'react-navigation';
 
-class Login extends Component {
+
+class Confirm extends Component {
 
   constructor(props) {
     super(props)
@@ -41,54 +43,34 @@ class Login extends Component {
       showAlert: false,
       message_title: '',
       Spinner: false,
+      code: '',
+      enter: ''
 
     };
   }
 
   
 
-  componentDidMount() { 
+  getToken = async () => {
+    const code = await this.props.navigation.getParam('code');
+    const email = await this.props.navigation.getParam('email');
+    this.setState({code})
+    this.setState({email})
 
   }
 
-  async loginRequest(){
+  async resetRequest(){
 
       this.setState({Spinner: true});
 
-      axios({ method: 'POST', url: `${this.state.baseURL}/login`, data: { 
-        email: this.state.email,
-        password: this.state.password,
-        } })
-        
-      .then(function(response) {
+      if(this.state.code === this.state.enter){
         this.setState({Spinner: false});
-
-        if (response.data.error === false){
-
-          try {
-
-            AsyncStorage.setItem('token',  `Bearer ${response.data.access_token}`);
-
-            AsyncStorage.setItem('status', response.data.status);
-
-            this.props.navigation.navigate('Homepage')
-
-          } catch (error) {
-              this.setState({message: error})
-              this.showAlert();
-          }
-        }else{
-          this.setState({message: 'Please check your credentials and Try again'})
-          this.showAlert();
-
-        }
-
-      }.bind(this)).catch(function(error) {
+        this.props.navigation.navigate("Newreset",{  email: this.state.email})
+      }else{
         this.setState({Spinner: false});
-        this.setState({message: this.state.default_message})
+        this.setState({message: 'Your Code in incorrect'})
         this.showAlert();
-    }.bind(this));
-  
+      }
 
 };
 
@@ -108,6 +90,7 @@ class Login extends Component {
   render() {
     return (
       <Container>
+        <NavigationEvents onDidFocus={() => this.getToken()} />
         <Header 
             style={{ backgroundColor: "#FF5A5A" }}
             androidStatusBarColor="#FF5A5A"
@@ -125,29 +108,21 @@ class Login extends Component {
         <Content style={styles.imageContainer}>
         <View>
           <H1 style={styles.textInput}>
-            Sign In
+            Reset Password
           </H1>
           <View>
-            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30}}>  Email</Label>
+            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30}}>  Confirm Code</Label>
             <Item  stackedLabel regular error rounded  style={styles.inputStyle}>
-              <Input  value={this.state.email} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
-                onChangeText={(text) => {this.setState({email: text})}} 
+              <Input  value={this.state.enter} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
+                onChangeText={(text) => {this.setState({enter: text})}} 
                 />
             </Item>
 
-            <Label style={{ color: 'white', fontWeight: "bold", marginLeft: 30, marginTop: 30}}>  Password</Label>
-            <Item  stackedLabel regular error rounded  style={styles.inputStyle}>
-              <Input secureTextEntry={true}  value={this.state.password} style={{ borderColor: '#FF5A5A', borderWidth: 1, color: 'white'}}
-                onChangeText={(text) => {this.setState({password: text})}} 
-                />
-            </Item>
+           
 
-            <Button  block rounded style={styles.bottonStyle2} onPress= {() => this.loginRequest()}>
-            <Text style={{color: 'white', textAlign: 'center',alignSelf: "center",}}>Sign In</Text>
+            <Button  block rounded style={styles.bottonStyle2} onPress= {() => this.resetRequest()}>
+            <Text style={{color: 'white', textAlign: 'center',alignSelf: "center",}}>Reset Password</Text>
           </Button>
-
-          <Text style={{color: 'white',alignSelf: "center", marginTop:6}} onPress={() => this.props.navigation.navigate("Reset")} >Reset Password?
-          </Text>
 
           <Text style={{color: 'white',alignSelf: "center", marginTop:6}}>New to PicID?
           <Text style={{color: 'white', marginBottom:10, fontWeight: "bold"}} onPress={() => this.props.navigation.navigate("Register")} > Sign Up </Text>
@@ -190,4 +165,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Confirm;

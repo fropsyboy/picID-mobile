@@ -57,7 +57,7 @@ export default {
   bottonStyle2: {
     backgroundColor: '#EF3C3C',
     alignSelf: "center",
-    marginTop:deviceHeight * 0.18,
+    marginTop:deviceHeight * 0.3,
     width: deviceWidth * 0.4,
     borderRadius: 100,
     textAlign: 'center'
